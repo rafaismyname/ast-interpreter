@@ -1,0 +1,16 @@
+{
+  "type": "program",
+  "statements": [
+    {
+      "type": "return",
+      "expression": {
+        "type": "built_in_function",
+        "name": "plus",
+        "expressions": [
+          { "type": "literal", "value": 5 },
+          { "type": "literal", "value": 10 }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "type": "program",
+  "statements": [
+    {
+      "type": "function_definition",
+      "name": "subtractOne",
+      "parameters": ["num"],
+      "statements": [
+        {
+          "type": "return",
+          "expression": {
+            "type": "built_in_function",
+            "name": "minus",
+            "expressions": [
+              { "type": "parameter", "name": "num" },
+              { "type": "literal", "value": 1 }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "return",
+      "expression": {
+        "type": "function_call",
+        "name": "subtractOne",
+        "expressions": [
+          { "type": "literal", "value": 10 }
+        ]
+      }
+    }
+  ]
+}

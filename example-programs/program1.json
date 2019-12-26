@@ -1,0 +1,9 @@
+{
+  "type": "program",
+  "statements": [
+    {
+      "type": "return",
+      "expression": { "type": "literal", "value": "foo" }
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "type": "program",
+  "statements": [
+    {
+      "type": "function_definition",
+      "name": "sumOrSubtractOne",
+      "parameters": ["operation", "num"],
+      "statements": [
+        {
+          "type": "if",
+          "expression": {
+            "type": "built_in_function",
+            "name": "equal",
+            "expressions": [
+              { "type": "parameter", "name": "operation" },
+              { "type": "literal", "value": "sum" }
+            ]
+          },
+          "statements": [
+            {
+              "type": "return",
+              "expression": {
+                "type": "built_in_function",
+                "name": "plus",
+                "expressions": [
+                  { "type": "parameter", "name": "num" },
+                  { "type": "literal", "value": 1 }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "return",
+          "expression": {
+            "type": "built_in_function",
+            "name": "minus",
+            "expressions": [
+              { "type": "parameter", "name": "num" },
+              { "type": "literal", "value": 1 }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "return",
+      "expression": {
+        "type": "function_call",
+        "name": "sumOrSubtractOne",
+        "expressions": [
+          { "type": "literal", "value": "sum" },
+          { "type": "literal", "value": 10 }
+        ]
+      }
+    }
+  ]
+}
