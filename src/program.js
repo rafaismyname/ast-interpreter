@@ -53,6 +53,15 @@ const Program = {
         scope.setFunction(statement.name, statement.parameters, statement.statements);
       }
 
+      if (statement.type === 'if') {
+        const expression = Program.evaluateExpression(statement.expression, scope);
+        if (expression === true) {
+          const evaluatedStatements = Program.evaluateStatements('if', statement.statements, scope);
+          return evaluatedStatements;
+        }
+      }
+
+
       if (statement.type === 'return') {
         const expression = Program.evaluateExpression(statement.expression, scope);
 
