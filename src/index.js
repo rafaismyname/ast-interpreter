@@ -13,9 +13,25 @@ const evaluateExpression = (expression) => {
     return expression.value; // literal evaluates to its value
   }
 
+  if (expression.type === 'built_in_function') {
+    const [left, right] = expression.expressions.map(evaluateExpression);
+
+    switch (expression.name) {
+      case 'plus':
+        return left + right;
+      case 'minus':
+        return left - right;
+      case 'equal':
+        return left === right;
+      default:
+        break;
+    }
+  }
+
   return undefined;
 };
 
+// execute every program statement
 for (let i = 0; i < AST.statements.length; i += 1) {
   const statement = AST.statements[i];
 
