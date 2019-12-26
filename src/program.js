@@ -1,24 +1,13 @@
-const Stack = {
-  functions: new Map(),
-  callParameters: new Map(),
-
-  setCallParameters(parameters) {
-    Object.keys(parameters).forEach((key) => Stack.callParameters.set(key, parameters[key]));
-  },
-
-  clearCallParameters() {
-    Stack.callParameters = new Map();
-  },
-};
-
 const Program = {
-  evaluateExpression(expression) {
+  evaluateExpression(expression, scope) {
     if (expression.type === 'literal') {
       return expression.value; // literal evaluates to its value
     }
 
     if (expression.type === 'built_in_function') {
-      const [left, right] = expression.expressions.map(Program.evaluateExpression);
+      const [left, right] = expression.expressions.map((functionExpression) => (
+        Program.evaluateExpression(functionExpression, scope)
+      ));
 
       switch (expression.name) {
         case 'plus':
@@ -33,43 +22,39 @@ const Program = {
     }
 
     if (expression.type === 'function_call') {
-      const calledFunction = Stack.functions.get(expression.name);
-      const callParameters = expression.expressions.reduce((acc, param, i) => {
+      const calledFunction = scope.functions.get(expression.name);
+
+      // map exery function call expression into a function definition parameter
+      expression.expressions.forEach((param, i) => {
         const paramName = calledFunction.parameters[i];
-        if (!paramName) return acc;
+        if (!paramName) return;
 
-        return { ...acc, [paramName]: Program.evaluateExpression(param) };
-      }, {});
+        const paramValue = Program.evaluateExpression(param, scope);
+        scope.setVar(paramName, paramValue);
+      });
 
-      Stack.setCallParameters(callParameters);
-
-      const evaluatedStatements = Program.evaluateStatements('functionCall', calledFunction.statements);
-
-      Stack.clearCallParameters();
+      const evaluatedStatements = Program.evaluateStatements('functionCall', calledFunction.statements, scope);
 
       return evaluatedStatements;
     }
 
     if (expression.type === 'parameter') {
-      return Stack.callParameters.get(expression.name);
+      return scope.variables.get(expression.name);
     }
 
     return undefined;
   },
 
-  evaluateStatements(level, statements) {
+  evaluateStatements(level, statements, scope) {
     for (let i = 0; i < statements.length; i += 1) {
       const statement = statements[i];
 
       if (statement.type === 'function_definition') {
-        Stack.functions.set(statement.name, {
-          parameters: statement.parameters,
-          statements: statement.statements,
-        });
+        scope.setFunction(statement.name, statement.parameters, statement.statements);
       }
 
       if (statement.type === 'return') {
-        const expression = Program.evaluateExpression(statement.expression);
+        const expression = Program.evaluateExpression(statement.expression, scope);
 
         if (level === 'program') {
           return console.log(expression);
