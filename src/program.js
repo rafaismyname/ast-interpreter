@@ -33,9 +33,7 @@ const Program = {
         scope.setVar(paramName, paramValue);
       });
 
-      const evaluatedStatements = Program.evaluateStatements('functionCall', calledFunction.statements, scope);
-
-      return evaluatedStatements;
+      return Program.evaluateStatements('functionCall', calledFunction.statements, scope);
     }
 
     if (expression.type === 'parameter') {
@@ -54,13 +52,11 @@ const Program = {
       }
 
       if (statement.type === 'if') {
-        const expression = Program.evaluateExpression(statement.expression, scope);
-        if (expression === true) {
-          const evaluatedStatements = Program.evaluateStatements('if', statement.statements, scope);
-          return evaluatedStatements;
+        const evaluatedExpression = Program.evaluateExpression(statement.expression, scope);
+        if (evaluatedExpression === true) {
+          return Program.evaluateStatements('if', statement.statements, scope);
         }
       }
-
 
       if (statement.type === 'return') {
         const expression = Program.evaluateExpression(statement.expression, scope);
