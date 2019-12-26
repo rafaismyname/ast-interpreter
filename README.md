@@ -1,5 +1,12 @@
 # AST Interpreter
 
+#### How to run example programs:
+```bash
+npm start ../example-programs/program1.json
+```
+---
+
+## Syntax
 ### Program Syntax
 ```json
 {
